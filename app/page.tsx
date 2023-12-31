@@ -1,113 +1,191 @@
-import Image from 'next/image'
+'use client'
+import { CardHeader, CardContent, Card } from "@/components/ui/card"
+import { GeistSans } from "geist/font/sans";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+
+import { Playfair_Display } from 'next/font/google';
+import { BookmarkFilledIcon } from '@radix-ui/react-icons'
+import { Progress } from "@/components/ui/progress"
+import { CarouselApi} from "@/components/ui/carousel"
+import { Badge } from "@/components/ui/badge"
+import {useState, useEffect} from 'react'
+
+const googleFont = Playfair_Display({
+  weight: '400', 
+});
+
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+
+    const [api, setApi] = useState<CarouselApi>()
+    const [progress, setProgress] = useState(0)
+    const [numberOfCards, setNumberOfCards] = useState(0)
+
+    useEffect(() => {
+      if (!api) {
+        return;
+      }
+     
+      setNumberOfCards(api.slideNodes().length-1)
+      const handleSelect = (api: CarouselApi) => {
+        const slideProgress = Math.round(((api.selectedScrollSnap())/(api.slideNodes().length-1)) * 100)
+        setProgress(slideProgress);
+      };
+    
+      api.on("select", handleSelect);
+    
+      // Cleanup function
+      return () => {
+        api.off("select", handleSelect);
+      };
+    }, [api]);
+    
+
+    return (
+      <div>
+        <div className={`${googleFont.className} text-center flex justify-center pl-8 pr-8 mt-20 lg:mt-40 mb-20 lg:mb-40 text-7xl lg:text-8xl`}><h1>Beautiful Cards</h1></div>
+      <div className="flex items-center justify-center">
+        <div>
+          <div className="flex items-center justify-center">
+            <Progress className="w-32 mb-4 bg-stone-200 bg-opacity-30 h-[6px]" value={progress} indicatorColor="bg-stone-200"/>
+          </div>
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: "center",
+          }}
+          className="w-full max-w-sm lg:max-w-lg"
+        >
+          <CarouselContent>
+            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+              <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <BookmarkFilledIcon className="absolute top-0 left-0 size-20"/>
+                <CardHeader 
+                  className="flex items-center justify-center h-full"
+                >
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8`}
+                  >
+                    The best Japanese proverbs of our time.
+                  </h2>
+                  <Badge className="bg-white text-black bg-opacity-70 font-light rounded-xl">{numberOfCards} cards</Badge>
+                </CardHeader>
+              </Card>
+            </CarouselItem>
+            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+            <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <CardHeader>
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8 pb-4`}
+                  >
+                    Japanese Legend
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                    There’s a Japanese legend that says,
+                    “If you feel like you’re losing everything,
+                    remember, trees lose their leaves every year,
+                    <span className="bg-[#ffff88] p-0.5">yet they still stand tall and</span>
+                    <span className="bg-[#ffff88] p-0.5">wait for better days to come.”</span>
+
+                  </p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+            <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <CardHeader>
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8 pb-4`}
+                  >
+                    Fall serven times, stand up eight
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                    七転び八起き (Nana korobi ya oki).
+                    Perseverance is key; keep trying despite repeated failures.
+                  </p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+            <CarouselItem>
+              <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <CardHeader>
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8 pb-4`}
+                  >
+                    Regret comes after the fact
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                  後悔先に立たず (Kōkai saki ni tatazu).
+                  It's easy to regret something after it's done, but it's important to think before acting to avoid regret. This saying warns against rash decisions and encourages foresight.
+                  </p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+            <CarouselItem>
+              <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <CardHeader>
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8 pb-4`}
+                  >
+                    The mouth is the source of disaster
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                  口は災いの元 (Kuchi wa wazawai no moto).
+                  Careless talk or words can cause a lot of trouble. It's akin to the English saying, "Loose lips sink ships," emphasizing the need for discretion.
+                  </p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+            <CarouselItem>
+              <Card 
+                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+              >
+                <CardHeader>
+                  <h2
+                    className={`${googleFont.className} text-3xl text-center p-8 pb-4`}
+                  >
+                    What one learns in the cradle lasts till the tomb
+                  </h2>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                  三つ子の魂百まで (Mitsugo no tamashii hyaku made).
+                  Early childhood education and experiences have a lasting impact throughout one's life.
+                  </p>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+      </Carousel>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    )
 }
+
