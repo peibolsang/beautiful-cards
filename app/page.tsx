@@ -17,7 +17,8 @@ import { Badge } from "@/components/ui/badge"
 import {useState, useEffect} from 'react'
 
 const googleFont = Playfair_Display({
-  weight: '400', 
+  weight: '400',
+  subsets: ['latin'] // Add this line
 });
 
 
