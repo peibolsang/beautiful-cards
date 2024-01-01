@@ -1,6 +1,5 @@
 'use client'
 import { CardHeader, CardContent, Card } from "@/components/ui/card"
-import { GeistSans } from "geist/font/sans";
 import {
   Carousel,
   CarouselContent,
@@ -21,12 +20,46 @@ const googleFont = Playfair_Display({
   subsets: ['latin'] // Add this line
 });
 
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return width;
+}
+
+const ResponsiveCarouselButtons = () => {
+  const width = useWindowWidth();
+  const isMobile = width < 768; // You can adjust this threshold
+
+  if (isMobile) {
+    return null; // Don't render anything on mobile devices
+  }
+
+  return (
+    <>
+      <CarouselPrevious />
+      <CarouselNext />
+    </>
+  ); // Render your component on non-mobile devices
+};
+
+
+
 
 export default function Home() {
 
     const [api, setApi] = useState<CarouselApi>()
     const [progress, setProgress] = useState(0)
     const [numberOfCards, setNumberOfCards] = useState(0)
+
+    
 
     useEffect(() => {
       if (!api) {
@@ -49,7 +82,7 @@ export default function Home() {
     
 
     return (
-      <div>
+      <div className="">
         <div className={`${googleFont.className} text-center flex justify-center pl-8 pr-8 mt-20 lg:mt-40 mb-20 lg:mb-40 text-7xl lg:text-8xl`}><h1>Beautiful Cards</h1></div>
       <div className="flex items-center justify-center">
         <div>
@@ -61,12 +94,12 @@ export default function Home() {
           opts={{
             align: "center",
           }}
-          className="w-full max-w-sm lg:max-w-lg"
+          className="w-screen md:max-w-md lg:max-w-lg"
         >
-          <CarouselContent>
-            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+          <CarouselContent >
+            <CarouselItem >
               <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <BookmarkFilledIcon className="absolute top-0 left-0 size-20"/>
                 <CardHeader 
@@ -77,13 +110,13 @@ export default function Home() {
                   >
                     The best Japanese proverbs of our time.
                   </h2>
-                  <Badge className="bg-white text-black bg-opacity-70 font-light rounded-xl">{numberOfCards} cards</Badge>
+                  <Badge className="bg-white text-black bg-opacity-70 hover:bg-stone-200 hover:bg-opacity-75 font-light rounded-xl">{numberOfCards} cards</Badge>
                 </CardHeader>
               </Card>
             </CarouselItem>
-            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+            <CarouselItem className="">
             <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <CardHeader>
                   <h2
@@ -104,9 +137,9 @@ export default function Home() {
                 </CardContent>
               </Card>
             </CarouselItem>
-            <CarouselItem className="lg:basis-1/1 flex items-center justify-center ">
+            <CarouselItem >
             <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <CardHeader>
                   <h2
@@ -123,9 +156,9 @@ export default function Home() {
                 </CardContent>
               </Card>
             </CarouselItem>
-            <CarouselItem>
+            <CarouselItem >
               <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <CardHeader>
                   <h2
@@ -142,9 +175,9 @@ export default function Home() {
                 </CardContent>
               </Card>
             </CarouselItem>
-            <CarouselItem>
+            <CarouselItem >
               <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <CardHeader>
                   <h2
@@ -161,9 +194,9 @@ export default function Home() {
                 </CardContent>
               </Card>
             </CarouselItem>
-            <CarouselItem>
+            <CarouselItem >
               <Card 
-                className="border-none bg-[#f4f1ea] w-full h-[350px] text-black shadow-lg rounded-lg relative"
+                className="m-4 border-none bg-[#f4f1ea] h-[350px] text-black shadow-lg rounded-lg relative"
               >
                 <CardHeader>
                   <h2
@@ -181,8 +214,7 @@ export default function Home() {
               </Card>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <ResponsiveCarouselButtons />
       </Carousel>
         </div>
       </div>
