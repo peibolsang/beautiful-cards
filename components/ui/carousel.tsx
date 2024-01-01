@@ -250,23 +250,39 @@ const CarouselNext = React.forwardRef<
 CarouselNext.displayName = "CarouselNext"
 
 
+
 function useWindowWidth() {
-  const [width, setWidth] = useState(768);
+  // Initialize width with undefined and specify its type to be either number or undefined
+  const [width, setWidth] = useState<number | undefined>(undefined);
 
   useEffect(() => {
+    // Define a function to update the width
     const handleResize = () => setWidth(window.innerWidth);
+
+    // Set the initial width when the component mounts
+    handleResize(); // This will set the initial width based on the window's innerWidth
+
+    // Attach the event listener for the resize event
     window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+
+    // Return a cleanup function to remove the event listener
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return width;
 }
 
+
 const ResponsiveCarouselButtons = () => {
   const width = useWindowWidth();
-  const isMobile = width < 768; // You can adjust this threshold
+
+  // If width is undefined, it's likely still on the server or initializing. 
+  // You can choose to render nothing or a placeholder in this case.
+  if (width === undefined) {
+    return null; // or some placeholder
+  }
+
+  const isMobile = width < 768;
 
   if (isMobile) {
     return null; // Don't render anything on mobile devices
@@ -279,6 +295,7 @@ const ResponsiveCarouselButtons = () => {
     </>
   ); // Render your component on non-mobile devices
 };
+
 
 export {
   type CarouselApi,
