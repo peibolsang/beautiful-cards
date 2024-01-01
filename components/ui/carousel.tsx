@@ -9,6 +9,7 @@ import useEmblaCarousel, {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import {useState, useEffect} from 'react'
 
 type CarouselProps = {
   opts?: CarouselOptions
@@ -248,6 +249,37 @@ const CarouselNext = React.forwardRef<
 })
 CarouselNext.displayName = "CarouselNext"
 
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(768);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return width;
+}
+
+const ResponsiveCarouselButtons = () => {
+  const width = useWindowWidth();
+  const isMobile = width < 768; // You can adjust this threshold
+
+  if (isMobile) {
+    return null; // Don't render anything on mobile devices
+  }
+
+  return (
+    <>
+      <CarouselPrevious />
+      <CarouselNext />
+    </>
+  ); // Render your component on non-mobile devices
+};
+
 export {
   type CarouselApi,
   Carousel,
@@ -255,4 +287,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  ResponsiveCarouselButtons,
 }

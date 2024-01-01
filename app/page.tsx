@@ -4,8 +4,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  ResponsiveCarouselButtons
 } from "@/components/ui/carousel"
 
 import { Playfair_Display } from 'next/font/google';
@@ -20,46 +19,11 @@ const googleFont = Playfair_Display({
   subsets: ['latin'] // Add this line
 });
 
-function useWindowWidth() {
-  const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  return width;
-}
-
-const ResponsiveCarouselButtons = () => {
-  const width = useWindowWidth();
-  const isMobile = width < 768; // You can adjust this threshold
-
-  if (isMobile) {
-    return null; // Don't render anything on mobile devices
-  }
-
-  return (
-    <>
-      <CarouselPrevious />
-      <CarouselNext />
-    </>
-  ); // Render your component on non-mobile devices
-};
-
-
-
-
 export default function Home() {
 
     const [api, setApi] = useState<CarouselApi>()
     const [progress, setProgress] = useState(0)
     const [numberOfCards, setNumberOfCards] = useState(0)
-
-    
 
     useEffect(() => {
       if (!api) {
