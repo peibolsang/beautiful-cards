@@ -47,7 +47,7 @@ export default function Home() {
 
     return (
       <div className="">
-        <div className={`${googleFont.className} text-center flex justify-center pl-8 pr-8 mt-20 lg:mt-40 mb-20 lg:mb-40 text-7xl lg:text-8xl`}><h1>Beautiful Cards</h1></div>
+        <div className={`${googleFont.className} text-center flex justify-center pl-8 pr-8 mt-20 lg:mt-40 mb-10 lg:mb-20 lg:mb-40 text-5xl lg:text-8xl`}><h1>Beautiful Cards</h1></div>
       <div className="flex items-center justify-center">
         <div>
           <div className="flex items-center justify-center">
